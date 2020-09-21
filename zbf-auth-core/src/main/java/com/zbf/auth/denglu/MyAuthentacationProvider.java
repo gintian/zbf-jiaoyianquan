@@ -20,11 +20,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
- * @author: LCG
- * 作者: LCG
- * 日期: 2020/8/26 21:43
- * 描述: 这个类主要是用用来认证 密码的  有验证码什么的也可在此认证
- */
+  *@Author tongdaowei
+  *@Description //TODO
+  *@Date 2020/9/16 0016 上午 9:31
+  *@Param
+  *@return
+  *@miaoshu 这个类主要是用用来认证 密码的  有验证码什么的也可在此认证
+**/
 
 @Component
 public class MyAuthentacationProvider implements AuthenticationProvider {

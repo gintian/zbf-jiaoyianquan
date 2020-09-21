@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbf.user.mapper.BaseUserMapper">
+<!--    <select id="selectPageVo" resultMap="usetMap">-->
+<!--        SELECT-->
+<!--        bu.*, br. NAME bname-->
+<!--        FROM-->
+<!--        base_user_role bur-->
+<!--        INNER JOIN base_user bu ON bu.id = bur.userId-->
+<!--        INNER JOIN base_role br ON br.id = bur.roleId-->
+
+<!--        <where>-->
+<!--            <if test="userVo.userName!=null and userVo.userName!=''">-->
+<!--                and bu.userName like '%${userVo.userName}%'-->
+<!--            </if>-->
+<!--            <if test="userVo.loginName!=null and userVo.loginName!=''">-->
+<!--                and bu.loginName like '%${userVo.loginName}%'-->
+<!--            </if>-->
+<!--            <if test="userVo.tel!=null and userVo.tel!=''">-->
+<!--                and bu.tel like '%${userVo.tel}%'-->
+<!--            </if>-->
+<!--        </where>-->
+
+<!--    </select>-->
+
+<!--    <resultMap id="usetMap" type="com.zbf.user.entity.BaseUser">-->
+<!--        <id     column="id" property="id"/>-->
+<!--        <result column="version"    property="version"/>-->
+<!--        <result column="userName"   property="userName"/>-->
+<!--        <result column="loginName"  property="loginName"/>-->
+<!--        <result column="passWord"   property="passWord"/>-->
+<!--        <result column="tel"        property="tel"/>-->
+<!--        <result column="buMen"      property="buMen"/>-->
+<!--        <result column="salt"       property="salt"/>-->
+<!--        <result column="createTime" property="createTime"/>-->
+<!--        <result column="updateTime" property="updateTime"/>-->
+<!--        <result column="email"      property="email"/>-->
+<!--        <result column="sex"        property="sex"/>-->
+<!--    </resultMap>-->
+
+    <update id="ChangeUserSta">
+        update base_user set zt = #{zt} where id = #{id}
+    </update>
+</mapper>

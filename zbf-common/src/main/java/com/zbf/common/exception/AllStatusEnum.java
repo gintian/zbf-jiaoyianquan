@@ -2,13 +2,12 @@ package com.zbf.common.exception;
 
 import lombok.Data;
 
-/**
- * @author: LCG
- * 作者: LCG
- * 日期: 2020/9/9  17:45
- * 描述: 这里管理系统中所有的异常的状态
- */
-
+/* *
+  *@Author tongdaowei
+  *@Description //TODO
+  *@Date 2020/9/20 0020 下午 6:56
+  *@miaoshu  管理系统中所有的异常的状态
+**/
 public enum AllStatusEnum {
     //未登录
     NO_LOGIN("未登录",1001)
@@ -23,8 +22,15 @@ public enum AllStatusEnum {
     //登出成功
     ,LOGINOUT_SUCCESS("登出成功",1005)
     //登陆过期
-    ,TOKEN_HAS_EXPIRE("登录已过期，请重新登录",1007);
-    ;
+    ,TOKEN_HAS_EXPIRE("登录已过期，请重新登录",1007),
+    //未激活异常
+    NO_ACTIVITE("账户未激活",1008),
+    //账户被冻结
+    ACCOUNT_FREEZE("账户冻结",1009),
+    //访问后台成功
+    REQUEST_SUCCESS("访问成功",1010),
+    //访问后台失败
+    REQUEST_FAIRLE("访问失败",1011);
 
     /*信息*/
     private String msg;

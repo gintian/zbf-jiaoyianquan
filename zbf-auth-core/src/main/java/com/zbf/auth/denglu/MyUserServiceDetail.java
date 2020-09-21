@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * @author: LCG
- * 作者: LCG
+ * @author: tongdaowei
+ * 作者: tongdaowei
  * 日期: 2020/8/26 20:37
  * 描述: 这个类主要是用来根据传入的用户名获取用户信息的
  */
@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 public class MyUserServiceDetail implements UserDetailsService {
 
    /**
-    * 作者: LCG
+    * 作者: tongdaowei
     * 日期: 2020/9/8  12:44
     * 描述:  校验手机号的判断
     */
