@@ -119,6 +119,13 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.54</version>
         </dependency>
+
+        <!-- minoi -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>7.1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

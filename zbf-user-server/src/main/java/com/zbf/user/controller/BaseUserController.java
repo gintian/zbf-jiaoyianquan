@@ -17,6 +17,10 @@ import com.zbf.user.service.IBaseUserService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -169,36 +173,29 @@ public class BaseUserController {
         return save;
     }
 
-    /**
-      *@Author tongdaowei
-      *@Description //TODO
-      *@Date 2020/9/19 0019 下午 6:47
-      *@Param [file]
-      *@return java.util.Map<java.lang.String,java.lang.Object>
-      *@miaoshu 图片上传
-    **/
-    @RequestMapping("upload")
-    public Map<String,Object> upload(@RequestParam("file") MultipartFile file){
-        Map<String,Object> map=new HashMap<>();
 
-        String originalFilename = file.getOriginalFilename();
-
-        String extName = originalFilename.substring(originalFilename.lastIndexOf("."));
-
-        String fileName = UUID.randomUUID() + extName;
-
-        File file1 = new File(filePath,fileName);
-
-        try {
-            file.transferTo(file1);
-            map.put("imgUrl",fileDomain+fileName);
-            map.put("fileName",fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return map;
-    }
+//    @RequestMapping("upload")
+//    public Map<String,Object> upload(@RequestParam("file") MultipartFile file){
+//        Map<String,Object> map=new HashMap<>();
+//
+//        String originalFilename = file.getOriginalFilename();
+//
+//        String extName = originalFilename.substring(originalFilename.lastIndexOf("."));
+//
+//        String fileName = UUID.randomUUID() + extName;
+//
+//        File file1 = new File(filePath,fileName);
+//
+//        try {
+//            file.transferTo(file1);
+//            map.put("imgUrl",fileDomain+fileName);
+//            map.put("fileName",fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return map;
+//    }
 
 
     /**
@@ -390,8 +387,117 @@ public class BaseUserController {
         }
         responseResult.setCode(400);
         return responseResult;
-
     }
 
+    /**
+     *@Author tongdaowei
+     *@Description //TODO
+     *@Date 2020/9/19 0019 下午 6:47
+     *@Param [file]
+     *@return java.util.Map<java.lang.String,java.lang.Object>
+     *@miaoshu 图片上传
+     **/
+    //上传图片
+    //minio端口号
+    private static  String url="http://192.168.158.1:9000";
+    //账号密码
+    private static  String access="minioadmin";
+    private static  String secret="minioadmin";
+    //上传文件夹名称
+    private static String bucket="tdw";
+    /*
+     * @Author tongdaowei
+     * @Description //图片上传
+     * @Date  2020/9/20
+     * @Param [file]
+     * @return java.lang.String
+     **/
+    @RequestMapping("upload")
+    public String upload(@RequestParam("file")MultipartFile file)throws IOException, InvalidPortException, InvalidEndpointException {
+        String fileName=null;
+        try {
+            //创建MinioClient对象
+            MinioClient minioClient =
+                    MinioClient.builder()
+                            .endpoint(url)
+                            .credentials(access, secret)
+                            .build();
+            InputStream in = file.getInputStream();
+            fileName = file.getOriginalFilename();
+            //String fileName = file.getName();
+            //文件上传到minio上的Name把文件后缀带上，不然下载出现格式问题
+            fileName = UUID.randomUUID() +"."+fileName.substring(fileName.lastIndexOf(".") + 1);
+            //创建头部信息
+            Map<String, String> headers = new HashMap<>(10);
+            //添加自定义内容类型
+            headers.put("Content-Type", "image/jpeg");
+            //添加存储类
+            headers.put("X-Amz-Storage-Class", "REDUCED_REDUNDANCY");
+            //添加自定义/用户元数据
+            Map<String, String> userMetadata = new HashMap<>(10);
+            userMetadata.put("My-Project", "Project One");
+            //上传
+            minioClient.putObject(
+                    PutObjectArgs.builder().bucket(bucket).object(fileName).stream(
+                            in, in.available(), -1)
+                            .headers(headers)
+                            .build());
+            in.close();
+            System.out.println(fileName);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        System.out.println(url+"/"+bucket+"/"+fileName);
+        return url+"/"+bucket+"/"+fileName;
+    }
+
+//    @RequestMapping("tes")
+//    public ResponseResult selbyuid(String uid){
+//        ResponseResult responseResult=new ResponseResult();
+//        BaseUser baseUser=iBaseUserService.getOne(new QueryWrapper<BaseUser>().eq("loginName", uid));
+//        List<BaseRole> baseroles = iBaseRoleService.list(new QueryWrapper<BaseRole>().inSql("id", "SELECT roleId FROM base_user_role WHERE base_user_role.userId=" + baseUser.getId()));
+//        List<BaseMenu> list=new ArrayList<BaseMenu>();
+//        Set<BaseMenu> se=new HashSet<>();
+//        baseroles.forEach(i->{
+//            listmenuByRid(i.getId()).forEach(j->{
+//                se.add(j);
+//            });
+//        });
+//        Lisdat lisdat =new Lisdat();
+//        lisdat.setBaseUser(baseUser);
+//        lisdat.setMenulist(se);
+//        responseResult.setResult(lisdat);
+//
+//        return responseResult;
+//    }
+
+    /* *
+      *@Author tongdaowei
+      *@Description //TODO
+      *@Date 2020/9/21 0021 下午 8:45
+      *@Param [file]
+      *@return com.zbf.common.entity.ResponseResult
+      *@miaoshu  导入
+    **/
+    @RequestMapping("excelToja")
+    public ResponseResult exceltoja(MultipartFile file){
+        ResponseResult responseResult=new ResponseResult();
+        try {
+            List<BaseUser> baseUsers = PoiUtil.importToMysql(BaseUser.class, file.getInputStream());
+            baseUsers.forEach(s->{
+                System.err.println(s.toString());
+            });
+            responseResult.setCode(200);
+            responseResult.setResult(true);
+            return  responseResult;
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            responseResult.setCode(500);
+            responseResult.setSuccess("导入excel失败");
+            return responseResult;
+        }
+    }
 
 }
