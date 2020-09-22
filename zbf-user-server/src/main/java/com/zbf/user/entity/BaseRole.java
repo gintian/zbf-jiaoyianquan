@@ -1,6 +1,9 @@
 package com.zbf.user.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -37,6 +40,9 @@ public class BaseRole implements Serializable {
      * 描述
      */
     private String miaoshu;
+
+    @TableField(exist = false)
+    private List<BaseMenu> baseMenus;
 
 
     public static long getSerialVersionUID() {
@@ -75,4 +81,11 @@ public class BaseRole implements Serializable {
         this.miaoshu = miaoshu;
     }
 
+    public List<BaseMenu> getBaseMenus() {
+        return baseMenus;
+    }
+
+    public void setBaseMenus(List<BaseMenu> baseMenus) {
+        this.baseMenus = baseMenus;
+    }
 }

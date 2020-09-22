@@ -47,13 +47,13 @@ public class BaseRoleController {
         if (dats.getRoleName()!=null&&!("").equals(dats.getRoleName())){
             wrapper.like("name",dats.getRoleName());
         }
+
         Page<BaseRole> pagehelp=new Page<>(dats.getCurrent(),dats.getSize());
         Page<BaseRole> page = iBaseRoleService.page(pagehelp, wrapper);
-        dats.setTotals((int) page.getTotal());
-        dats.setDat(page.getRecords());
-        List<BaseRole> list = iBaseRoleService.list(wrapper);
+
+
         ResponseResult responseResult=new ResponseResult();
-        responseResult.setResult(list);
+        responseResult.setResult(page);
         return responseResult;
     }
 

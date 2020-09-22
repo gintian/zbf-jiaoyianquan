@@ -2,6 +2,7 @@ package com.zbf.user.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zbf.common.entity.ResponseResult;
 import com.zbf.common.utils.UID;
 import com.zbf.user.entity.BaseMenu;
 import com.zbf.user.entity.BaseUser;
@@ -19,10 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -146,6 +144,55 @@ public class BaseMenuController {
     public boolean deleteMenu(@RequestBody BaseMenu baseMenu){
         System.err.println("修改数据"+baseMenu.toString());
         return true;
+    }
+
+    /**
+      *@Author tongdaowei
+      *@Description //TODO
+      *@Date 2020/9/22 0022 下午 3:02
+      *@Param []
+      *@return com.zbf.common.entity.ResponseResult
+      *@miaoshu  获取所有的菜单
+    **/
+    @RequestMapping("selectmenu")
+    public ResponseResult  selallmenu(){
+        ResponseResult responseResult=new ResponseResult();
+        List<BaseMenu> codes=iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode",0));
+
+        codes.forEach(co->{
+
+            List<BaseMenu> parentCodes = iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode", co.getCode()));
+            parentCodes.forEach(pa->{
+                pa.setList(iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode",pa.getCode())));
+            });
+            co.setList(parentCodes);
+        });
+        responseResult.setCode(200);
+        responseResult.setResult(codes);
+        return responseResult;
+
+    }
+
+
+    /**
+      *@Author tongdaowei
+      *@Description //TODO
+      *@Date 2020/9/22 0022 下午 3:02
+      *@Param [rid]
+      *@return com.zbf.common.entity.ResponseResult
+      *@miaoshu   根据角色获取菜单
+    **/
+    @RequestMapping("gjmenuRid")
+    public ResponseResult gjmenuRid(Long rid) {
+        ResponseResult responseResult=new ResponseResult();
+        List<BaseMenu> id = iBaseMenuService.list(new QueryWrapper<BaseMenu>().
+                inSql("id", "SELECT menu_id FROM base_role_menu WHERE base_role_menu.role_id=" + rid));
+        Set set=new HashSet<>();
+        id.forEach(s->{
+            set.add(s.getId());
+        });
+        responseResult.setResult(set);
+        return responseResult;
     }
 
 }

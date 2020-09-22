@@ -217,17 +217,13 @@ public class BaseUserController {
         ResponseResult responseResult=new ResponseResult();
         boolean b=iBaseUserService.ChangeUserSta(id,zt);
         if(b){
-            System.out.println(11111);
             responseResult.setCode(AllStatusEnum.REQUEST_SUCCESS.getCode());
             responseResult.setSuccess(AllStatusEnum.REQUEST_SUCCESS.getMsg());
             responseResult.setResult(b);
-            System.out.println(22222);
         }else {
-            System.out.println(3333);
             responseResult.setCode(AllStatusEnum.REQUEST_SUCCESS.getCode());
             responseResult.setSuccess(AllStatusEnum.REQUEST_SUCCESS.getMsg());
             responseResult.setResult(b);
-            System.out.println(4444);
         }
         System.err.println(responseResult.toString());
         return responseResult;
@@ -317,7 +313,7 @@ public class BaseUserController {
 
     }
 
-    /* *
+    /**
       *@Author tongdaowei
       *@Description //TODO
       *@Date 2020/9/20 0020 下午 8:42
@@ -405,7 +401,7 @@ public class BaseUserController {
     private static  String secret="minioadmin";
     //上传文件夹名称
     private static String bucket="tdw";
-    /*
+    /**
      * @Author tongdaowei
      * @Description //图片上传
      * @Date  2020/9/20
@@ -472,7 +468,7 @@ public class BaseUserController {
 //        return responseResult;
 //    }
 
-    /* *
+    /**
       *@Author tongdaowei
       *@Description //TODO
       *@Date 2020/9/21 0021 下午 8:45
@@ -488,8 +484,11 @@ public class BaseUserController {
             baseUsers.forEach(s->{
                 System.err.println(s.toString());
             });
+            //添加
+            boolean bool=iBaseUserService.saveBatch(baseUsers);
             responseResult.setCode(200);
             responseResult.setResult(true);
+            responseResult.setSuccess("导入excel成功");
             return  responseResult;
         } catch (IOException e) {
             e.printStackTrace();
