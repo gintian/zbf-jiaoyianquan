@@ -44,6 +44,17 @@ public class BaseRole implements Serializable {
     @TableField(exist = false)
     private List<BaseMenu> baseMenus;
 
+    @TableField(exist = false)
+    private Long[] mids;
+
+
+    public Long[] getMids() {
+        return mids;
+    }
+
+    public void setMids(Long[] mids) {
+        this.mids = mids;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

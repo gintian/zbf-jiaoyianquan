@@ -8,9 +8,8 @@ import com.zbf.common.entity.Dats;
 import com.zbf.common.entity.ResponseResult;
 import com.zbf.common.exception.AllStatusEnum;
 import com.zbf.common.utils.PoiUtil;
-import com.zbf.user.entity.BaseRole;
-import com.zbf.user.entity.BaseUser;
-import com.zbf.user.entity.BaseUserRole;
+import com.zbf.user.entity.*;
+import com.zbf.user.service.IBaseMenuService;
 import com.zbf.user.service.IBaseRoleService;
 import com.zbf.user.service.IBaseUserRoleService;
 import com.zbf.user.service.IBaseUserService;
@@ -59,6 +58,9 @@ public class BaseUserController {
 
     @Autowired
     private IBaseUserRoleService iBaseUserRoleService;
+
+    @Autowired
+    private IBaseMenuService iBaseMenuService;
 
     @Value("D://pic//")
     private String filePath;
@@ -172,30 +174,6 @@ public class BaseUserController {
         boolean save=iBaseUserService.saveOrUpdate(baseUser);
         return save;
     }
-
-
-//    @RequestMapping("upload")
-//    public Map<String,Object> upload(@RequestParam("file") MultipartFile file){
-//        Map<String,Object> map=new HashMap<>();
-//
-//        String originalFilename = file.getOriginalFilename();
-//
-//        String extName = originalFilename.substring(originalFilename.lastIndexOf("."));
-//
-//        String fileName = UUID.randomUUID() + extName;
-//
-//        File file1 = new File(filePath,fileName);
-//
-//        try {
-//            file.transferTo(file1);
-//            map.put("imgUrl",fileDomain+fileName);
-//            map.put("fileName",fileName);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return map;
-//    }
 
 
     /**
@@ -448,25 +426,6 @@ public class BaseUserController {
         return url+"/"+bucket+"/"+fileName;
     }
 
-//    @RequestMapping("tes")
-//    public ResponseResult selbyuid(String uid){
-//        ResponseResult responseResult=new ResponseResult();
-//        BaseUser baseUser=iBaseUserService.getOne(new QueryWrapper<BaseUser>().eq("loginName", uid));
-//        List<BaseRole> baseroles = iBaseRoleService.list(new QueryWrapper<BaseRole>().inSql("id", "SELECT roleId FROM base_user_role WHERE base_user_role.userId=" + baseUser.getId()));
-//        List<BaseMenu> list=new ArrayList<BaseMenu>();
-//        Set<BaseMenu> se=new HashSet<>();
-//        baseroles.forEach(i->{
-//            listmenuByRid(i.getId()).forEach(j->{
-//                se.add(j);
-//            });
-//        });
-//        Lisdat lisdat =new Lisdat();
-//        lisdat.setBaseUser(baseUser);
-//        lisdat.setMenulist(se);
-//        responseResult.setResult(lisdat);
-//
-//        return responseResult;
-//    }
 
     /**
       *@Author tongdaowei
@@ -498,5 +457,59 @@ public class BaseUserController {
             return responseResult;
         }
     }
+
+
+    /**
+     * 根据
+     * @param uid
+     * @return
+     */
+    /**
+      *@Author tongdaowei
+      *@Description //TODO
+      *@Date 2020/9/23 0023 下午 6:57
+      *@Param [uid]
+      *@return com.zbf.common.entity.ResponseResult
+      *@miaoshu   左边菜单
+    **/
+    @RequestMapping("tes")
+    public ResponseResult selbyuid(String uid){
+       // System.out.println("左侧菜单的id"+uid);
+        ResponseResult responseResult=new ResponseResult();
+        BaseUser baseUser=iBaseUserService.getOne(new QueryWrapper<BaseUser>().eq("loginName", uid));
+        List<BaseRole> baseroles = iBaseRoleService.list(new QueryWrapper<BaseRole>().inSql("id", "SELECT roleId FROM base_user_role WHERE base_user_role.userId=" + baseUser.getId()));
+        List<BaseMenu> list=new ArrayList<BaseMenu>();
+        Set<BaseMenu> se=new HashSet<>();
+        baseroles.forEach(i->{
+            listmenuByRid(i.getId()).forEach(j->{
+                se.add(j);
+            });
+
+
+        });
+        Lisdat lisdat =new Lisdat();
+        //baseUser.setUserName("zhangsan1");
+        lisdat.setBaseUser(baseUser);
+        lisdat.setMenulist(se);
+        responseResult.setResult(lisdat);
+
+        return responseResult;
+
+    }
+
+    public List<BaseMenu> listmenuByRid(long rid) {
+        List<BaseMenu> codes =iBaseMenuService.list(new QueryWrapper<BaseMenu>().inSql("id","SELECT menu_id FROM base_role_menu WHERE base_role_menu.role_id="+rid).eq("parentCode",0));
+        codes.forEach(co->{
+
+            List<BaseMenu> parentCodes = iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode", co.getCode()));
+            parentCodes.forEach(pa->{
+                pa.setList(iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode",pa.getCode())));
+            });
+            co.setList(parentCodes);
+        });
+
+        return codes;
+    }
+
 
 }
