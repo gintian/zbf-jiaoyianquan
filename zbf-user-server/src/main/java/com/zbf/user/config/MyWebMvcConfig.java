@@ -20,16 +20,16 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     }
 
 
-    //跨域访问配置
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("POST","GET","PUT","OPTIONS","DELETE")
-                .maxAge(3600)
-                .allowCredentials(true);
-
-    }
+//    //跨域访问配置
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("*")
+//                .allowedMethods("POST","GET","PUT","OPTIONS","DELETE")
+//                .maxAge(3600)
+//                .allowCredentials(true);
+//
+//    }
 
 
     /**

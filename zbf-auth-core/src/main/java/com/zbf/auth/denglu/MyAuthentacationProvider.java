@@ -49,7 +49,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
         String userName = authentication.getPrincipal().toString();
         //获取用户填写的密码
         String password = authentication.getCredentials().toString();
-
+        String re="";
         //判断邮箱
         if(userName.contains("@")){
             String s = redisTemplate.opsForValue().get("code");
@@ -59,6 +59,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
                 System.out.println("开始判断");
                 //根据用户名获取用户的信息，这里调用根据用户名获取用户信息的UserServiceDetail类
                 UserDetails userDetails = myUserServiceDetail.loadUserByUsername(userName);
+                re=userDetails.getUsername();
                 //根据获取的用户信息获取用户的密码
                 String password1 = userDetails.getPassword();
                 //查询所有的权限是不是在Redis，如果不在Redis的话，从数据库查询然后更新到Redis
@@ -76,7 +77,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
                 //这里一步--》密码校验成功后可以加载一下 当前用户的权限角色 放入缓存中方便鉴权的时候使用
                 //userDetails.getAuthorities();//这里存储的是当前用户的角色信息
                 //缓存用户的权限信息
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userName, password1, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), password1, userDetails.getAuthorities());
                 String string = JSON.toJSONString(usernamePasswordAuthenticationToken);
                 //将当前用户的角色信息 放入缓存大key user-auth 小key用户登录名获取权限，value用户的角色列表
                 redisTemplate.opsForHash().put("user-auth",userDetails.getUsername(),string);
@@ -95,6 +96,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
             if(s.equals(password)){
                 //根据用户名获取用户的信息，这里调用根据用户名获取用户信息的UserServiceDetail类
                 UserDetails userDetails = myUserServiceDetail.loadUserByUsername(userName);
+                re=userDetails.getUsername();
                 //根据获取的用户信息获取用户的密码
                 String password1 = userDetails.getPassword();
                 //查询所有的权限是不是在Redis，如果不在Redis的话，从数据库查询然后更新到Redis
@@ -112,7 +114,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
                 //这里一步--》密码校验成功后可以加载一下 当前用户的权限角色 放入缓存中方便鉴权的时候使用
                 //userDetails.getAuthorities();//这里存储的是当前用户的角色信息
                 //缓存用户的权限信息
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userName, password1, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), password1, userDetails.getAuthorities());
                 String string = JSON.toJSONString(usernamePasswordAuthenticationToken);
                 //将当前用户的角色信息 放入缓存大key user-auth 小key用户登录名获取权限，value用户的角色列表
                 redisTemplate.opsForHash().put("user-auth",userDetails.getUsername(),string);
@@ -126,6 +128,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
             //String encode = bCryptPasswordEncoder.encode(password);
             //根据用户名获取用户的信息，这里调用根据用户名获取用户信息的UserServiceDetail类
             UserDetails userDetails = myUserServiceDetail.loadUserByUsername(userName);
+            re=userDetails.getUsername();
             //根据获取的用户信息获取用户的密码
             String password1 = userDetails.getPassword();
             //bCryptPasswordEncoder这个类加密的密码每次是不一样的，所以要比较原始密码的话
@@ -152,7 +155,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
             //这里一步--》密码校验成功后可以加载一下 当前用户的权限角色 放入缓存中方便鉴权的时候使用
             //userDetails.getAuthorities();//这里存储的是当前用户的角色信息
             //缓存用户的权限信息
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userName, password1, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(re, password1, userDetails.getAuthorities());
             String string = JSON.toJSONString(usernamePasswordAuthenticationToken);
             //将当前用户的角色信息 放入缓存大key user-auth 小key用户登录名authentication.getPrincipal()，value用户的角色列表
             redisTemplate.opsForHash().put("user-auth",authentication.getPrincipal().toString(),string);

@@ -128,7 +128,6 @@ public class BaseUserController {
       *@Date 2020/9/19 0019 下午 6:45
       *@miaoshu   添加权限
     **/
-
     @RequestMapping("bindRoleForUser")
     public ResponseResult upduser(Dats dats){
         ResponseResult responseResult=new ResponseResult();
@@ -484,8 +483,6 @@ public class BaseUserController {
             listmenuByRid(i.getId()).forEach(j->{
                 se.add(j);
             });
-
-
         });
         Lisdat lisdat =new Lisdat();
         //baseUser.setUserName("zhangsan1");

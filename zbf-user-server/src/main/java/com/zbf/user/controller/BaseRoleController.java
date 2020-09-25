@@ -46,7 +46,30 @@ public class BaseRoleController {
       *@return com.zbf.common.entity.ResponseResult
       *@miaoshu  查询所有角色
     **/
-    @RequestMapping("selallrole")
+    @RequestMapping("roleList")
+    private ResponseResult roleList(Dats dats){
+        System.err.println("角色查询的条件是"+dats.toString());
+        QueryWrapper<BaseRole> wrapper=new QueryWrapper<>();
+        //模糊查询
+        if (dats.getRoleName()!=null&&!("").equals(dats.getRoleName())){
+            wrapper.like("name",dats.getRoleName());
+        }
+
+        List<BaseRole> list=iBaseRoleService.list(wrapper);
+        ResponseResult responseResult=new ResponseResult();
+        responseResult.setResult(list);
+        return responseResult;
+    }
+
+    /**
+     *@Author tongdaowei
+     *@Description //TODO
+     *@Date 2020/9/21 0021 上午 7:40
+     *@Param [dats]
+     *@return com.zbf.common.entity.ResponseResult
+     *@miaoshu  查询所有角色
+     **/
+    @RequestMapping("selallrule")
     private ResponseResult selallrule(Dats dats){
         System.err.println("角色查询的条件是"+dats.toString());
         QueryWrapper<BaseRole> wrapper=new QueryWrapper<>();
@@ -58,11 +81,11 @@ public class BaseRoleController {
         Page<BaseRole> pagehelp=new Page<>(dats.getCurrent(),dats.getSize());
         Page<BaseRole> page = iBaseRoleService.page(pagehelp, wrapper);
 
-
         ResponseResult responseResult=new ResponseResult();
         responseResult.setResult(page);
         return responseResult;
     }
+
 
     /**
       *@Author tongdaowei
@@ -83,6 +106,20 @@ public class BaseRoleController {
         responseResult.setResult(remove);
         responseResult.setCode(200);
         return responseResult;
+    }
+
+    /**
+      *@Author tongdaowei
+      *@Description //TODO
+      *@Date 2020/9/25 0025 上午 8:38
+      *@Param [baseRole]
+      *@return boolean
+      *@miaoshu  添加
+    **/
+    @RequestMapping("save")
+    public boolean save(@RequestBody BaseRole baseRole){
+        boolean save=iBaseRoleService.saveOrUpdate(baseRole);
+        return save;
     }
 
 }

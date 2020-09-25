@@ -33,7 +33,6 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/menu")
-@CrossOrigin
 public class BaseMenuController {
     @Autowired
     private IBaseMenuService iBaseMenuService;
@@ -63,7 +62,7 @@ public class BaseMenuController {
         return list;
     }
 
-    //列表
+    //菜单列表
     @RequestMapping("selectMenu")
     public List<BaseMenu> selectMenu(){
         List<BaseMenu> codes=iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode",0));
@@ -155,7 +154,7 @@ public class BaseMenuController {
       *@return com.zbf.common.entity.ResponseResult
       *@miaoshu  获取所有的菜单
     **/
-    @RequestMapping("selectmenu")
+    @RequestMapping("selallmenu")
     public ResponseResult  selallmenu(){
         ResponseResult responseResult=new ResponseResult();
         List<BaseMenu> codes=iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode",0));
