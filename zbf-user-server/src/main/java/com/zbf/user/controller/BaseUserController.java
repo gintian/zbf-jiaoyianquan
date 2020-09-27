@@ -174,6 +174,19 @@ public class BaseUserController {
         return save;
     }
 
+    /**
+      *@Author tongdaowei
+      *@Description //TODO
+      *@Date 2020/9/25 0025 上午 11:29
+      *@Param [baseUser]
+      *@return boolean
+      *@miaoshu   修改
+    **/
+    @RequestMapping("update")
+    public boolean update(@RequestBody BaseUser baseUser){
+        boolean update=iBaseUserService.updateById(baseUser);
+        return update;
+    }
 
     /**
       *@Author tongdaowei

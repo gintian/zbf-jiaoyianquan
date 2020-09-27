@@ -15,11 +15,14 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="msg-message" target="1.8" />
+      <module name="power_message" target="1.5" />
       <module name="zbf-yanzheng" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="msg-message" options="-parameters" />
       <module name="server-messgae" options="-parameters" />
       <module name="zbf-auth-core" options="-parameters" />
       <module name="zbf-common" options="-parameters" />

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 **/
 @RestController
 @ResponseBody
-public class LZLYanController {
+public class YanZhengController {
 
     @Autowired
     private GetCodeDao getCodeDao;
@@ -29,9 +29,10 @@ public class LZLYanController {
 
     @RequestMapping("/yan")
     public boolean getcode(String tel){
-        System.out.println("----------++++---------");
+        System.out.println("____________++++==++++____________");
         System.out.println(tel);
         boolean b = getCodeDao.sendCode(tel);
+        System.out.println(b);
         return b;
     }
 

@@ -53,10 +53,10 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
         //判断邮箱
         if(userName.contains("@")){
             String s = redisTemplate.opsForValue().get("code");
-            System.out.println(s+"-----------------");
+            System.out.println("============获取的验证码是:"+s);
 
             if(s.equals(password)){
-                System.out.println("开始判断");
+                System.out.println("开始进行判断");
                 //根据用户名获取用户的信息，这里调用根据用户名获取用户信息的UserServiceDetail类
                 UserDetails userDetails = myUserServiceDetail.loadUserByUsername(userName);
                 re=userDetails.getUsername();
@@ -81,6 +81,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
                 String string = JSON.toJSONString(usernamePasswordAuthenticationToken);
                 //将当前用户的角色信息 放入缓存大key user-auth 小key用户登录名获取权限，value用户的角色列表
                 redisTemplate.opsForHash().put("user-auth",userDetails.getUsername(),string);
+                System.out.println("登录成功");
                 return usernamePasswordAuthenticationToken;
             }else {
                 throw new BadCredentialsException("验证码过期或错误");
@@ -91,7 +92,7 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
         if(isPhone(userName)){
             System.out.println("@@@@@@@@@@@@@@@@"+userName);
             String s = redisTemplate.opsForValue().get("code");
-            System.out.println(s+"-----------------");
+            System.out.println("-----------------验证码:"+s);
 
             if(s.equals(password)){
                 //根据用户名获取用户的信息，这里调用根据用户名获取用户信息的UserServiceDetail类

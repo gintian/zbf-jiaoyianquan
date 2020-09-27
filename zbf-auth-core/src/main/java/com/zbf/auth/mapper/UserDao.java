@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +50,23 @@ public interface UserDao {
     @Update("update base_user set passWord=#{passWord} where tel=#{tel}")
     public Boolean getUpdateUser(User user);
 
+    /**
+     * 根据邮箱修改
+     * @param email
+     * @param pwd
+     * @return
+     */
+    @Transactional
+    @Update("UPDATE base_user u SET u.passWord=#{pwd} WHERE u.email =#{email}")
+    public int updByEmail(@Param("email") String email, @Param("pwd") String pwd);
+
+    /**
+     * 根据电话修改
+     * @param tel
+     * @param pwd
+     * @return
+     */
+    @Transactional
+    @Update("UPDATE base_user u SET u.passWord=#{pwd} WHERE u.tel =#{tel}")
+    public int updByTel(@Param("tel") String tel,@Param("pwd") String pwd);
 }

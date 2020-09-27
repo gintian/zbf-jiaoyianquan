@@ -83,4 +83,32 @@ public class MailQQUtils {
         sendMessage("2667648594@qq.com","1234","岩蛇网络","");
     }
 
+//    public static void sendMessage(String tel, String fourRandom, String webName) {
+//        try {
+//            Properties prop = new Properties();
+//            prop.setProperty("mail.transport.protocol", protocol);
+//            prop.setProperty("mail.smtp.host", host);
+//            prop.setProperty("mail.smtp.auth", "true");
+//            prop.put("mail.smtp.port",port);
+//            prop.setProperty("mail.debug", debug);
+//            Authenticator authenticator = new Authenticator() {
+//                @Override
+//                protected PasswordAuthentication getPasswordAuthentication() {
+//
+//                    return new PasswordAuthentication(from,authCode);
+//                }
+//            };
+//            //创建会话
+//            Session session = Session.getInstance(prop,authenticator);
+//            //填写信封写信
+//            Message msg = new MimeMessage(session);
+//            msg.setFrom(new InternetAddress(from));
+//
+//            msg.setSubject(webName+"激活邮箱!");
+//            //验证用户名密码发送邮件
+//            Transport.send(msg);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 }

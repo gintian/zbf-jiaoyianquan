@@ -31,12 +31,38 @@ public class Dats<t> {
     private List<t> dat;
     private String roleName;
     private Integer[] ids;
-
     private Integer total;
     private String type[];
     private String order;
+    private Integer zt;
     private String orderType[];
     private String excleName;
+    private Long roleId;
+    private Long userId;
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Integer getZt() {
+        return zt;
+    }
+
+    public void setZt(Integer zt) {
+        this.zt = zt;
+    }
 
     public Long getId() {
         return id;

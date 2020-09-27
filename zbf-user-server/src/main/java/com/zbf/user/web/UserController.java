@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
   *@Author tongdaowei
@@ -32,10 +33,13 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/auth")
 public class UserController {
+    private static final Pattern PATTERN_PHONE = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+    private static final Pattern PATTERN_EMAIL = Pattern.compile("^\\w+@\\w+([-]\\w+)*(\\.\\w+)+$");
     @Autowired
     RedisTemplate<String,String> redisTemplate;
     @Autowired
     private UserDao userDao;
+
     /**
      * 描述: 账户的激活地址
      */
@@ -206,4 +210,33 @@ public class UserController {
         FreemarkerUtils.getStaticHtml(RestController.class,"/template/","sendOK.html",stringObjectHashMap,response.getWriter());
     }
 
+    @RequestMapping("/register1")
+    public boolean register1(String password){
+        String yzm = redisTemplate.opsForValue().get("yzm");
+        System.err.println(yzm+"---------------------------------------------------------------");
+        if(password.equals(yzm)){
+            ResponseResult.getResponseResult().setCode(1006);
+            return true;
+        }
+        return false;
+    }
+
+//    @RequestMapping("/getyzm")
+//    public boolean getyzm(@RequestParam("tel") String tel) {
+//        if (isPhone(tel)) {
+//            return loginPhone.dd(tel);
+//        } else if (isEmail(tel)) {
+//            String fourRandom = RandomUtil.getFourRandom();
+//            MailQQUtils.sendMessage(tel,fourRandom,"岩蛇");
+//            return true;
+//        }
+//        return false;
+//    }
+//    public boolean isPhone(String phone){
+//        return PATTERN_PHONE.matcher(phone).matches();
+//    }
+//    // 邮箱验证正则比对
+//    public boolean isEmail(String email){
+//        return PATTERN_EMAIL.matcher(email).matches();
+//    }
 }

@@ -7,6 +7,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import javafx.scene.paint.Stop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +43,8 @@ public class SmsUtils {
             redisTemplate.opsForValue().set("code",fourRandom);
             return  true;
         }else {
-            System.out.println("+++++++++++++++++++________________");
-            System.out.println("@@@@@验证码的手机号"+tel);
+            System.out.println("+++++++++________________++++++++++");
+            System.out.println("验证码的手机号"+tel);
 
             // 产品名称:云通信短信API产品,开发者无需替换
             String product = "Dysmsapi";
@@ -91,6 +92,7 @@ public class SmsUtils {
             SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
             if(sendSmsResponse.getCode()!= null && sendSmsResponse.getCode().equals("OK")){
                 System.out.println("短信发送成功！");
+                System.out.println(code);
             }else {
                 System.out.println("短信发送失败！");
             }

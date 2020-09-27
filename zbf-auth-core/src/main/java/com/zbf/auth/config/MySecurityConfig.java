@@ -83,7 +83,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         http.   //认证请求
                 authorizeRequests()
                 //匹配这些路径
-                //"/user/listUser","/user/bindRoleForUser","/user/add","/user/ChangeUserZt","/user/toExcel","/user/toWord","/user/upload","/user/excelToja
                 .antMatchers("/oauth/**", "/actuator/**", "/forLogin", "/loginPage","/yan","/toNext","/UserAdd","/Update","/upPas","/auth/toRegister","/auth/upPas","/menu/listMenu","/menu/selectMenu","/menu/list","/user/listUser")
                 //无需认证
                 .permitAll()
