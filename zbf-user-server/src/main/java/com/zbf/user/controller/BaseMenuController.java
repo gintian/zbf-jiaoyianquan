@@ -11,6 +11,7 @@ import com.zbf.user.service.IBaseMenuService;
 import com.zbf.user.service.IBaseUserService;
 import com.zbf.user.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,14 +88,29 @@ public class BaseMenuController {
     /**
      *@Author tongdaowei
      *@Description //TODO
+     *@Date 2020/9/17 0017 下午 6:13
+     *@Param [time]
+     *@return java.time.LocalDateTime
+     *@miaoshu date转LocalDateTime
+     **/
+    private LocalDateTime dateToLocalDateTime(Date time) {
+        Instant it=time.toInstant();
+        ZoneId zid=ZoneId.systemDefault();
+        return LocalDateTime.ofInstant(it,zid);
+    }
+
+    /**
+     *@Author tongdaowei
+     *@Description //TODO
      *@Date 2020/9/17 0017 下午 3:50
-     *@miaoshu   添加
+     *@miaoshu   添加菜单
      **/
     @RequestMapping("addMenu")
     public boolean addMenu(@RequestBody BaseMenu baseMenu){
         System.err.println("添加数据"+baseMenu.toString());
         baseMenu.setCreateTime(dateToLocalDateTime(new Date()));
         baseMenu.setVersion(10);
+        baseMenu.setId(UID.next());
         boolean save=false;
         save=iBaseMenuService.save(baseMenu);
         if(save){
@@ -107,44 +123,50 @@ public class BaseMenuController {
     /**
       *@Author tongdaowei
       *@Description //TODO
-      *@Date 2020/9/17 0017 下午 6:13
-      *@Param [time]
-      *@return java.time.LocalDateTime
-      *@miaoshu date转LocalDateTime
-    **/
-    private LocalDateTime dateToLocalDateTime(Date time) {
-        Instant it=time.toInstant();
-        ZoneId zid=ZoneId.systemDefault();
-        return LocalDateTime.ofInstant(it,zid);
-    }
-
-    /**
-      *@Author tongdaowei
-      *@Description //TODO
       *@Date 2020/9/17 0017 下午 3:48
-      *@miaoshu   修改
+      *@miaoshu   修改菜单
     **/
 
     @RequestMapping("updateMenu")
-    public boolean updateMenu(@RequestBody BaseMenu baseMenu){
-        baseMenu.setId(UID.next());
-        System.err.println("修改数据"+baseMenu.toString());
-        boolean update=false;
-        update=iBaseMenuService.updateById(baseMenu);
-        return update;
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseResult updateMenu(@RequestBody BaseMenu baseMenu){
+        ResponseResult responseResult=new ResponseResult();
+        System.err.println("修改的数据是"+baseMenu.toString());
+        boolean save =false;
+        save=iBaseMenuService.updateById(baseMenu);
+        responseResult.setResult(save);
+        return responseResult;
     }
+//    @RequestMapping("updateMenu")
+//    public boolean updateMenu(@RequestBody BaseMenu baseMenu){
+//        baseMenu.setId(UID.next());
+//        System.err.println("修改数据"+baseMenu.toString());
+//        boolean update=false;
+//        update=iBaseMenuService.updateById(baseMenu);
+//        return update;
+//    }
 
     /**
       *@Author tongdaowei
       *@Description //TODO
       *@Date 2020/9/17 0017 下午 3:49
-      *@miaoshu   删除
+      *@miaoshu   删除菜单
     **/
     @RequestMapping("deleteMenu")
-    public boolean deleteMenu(@RequestBody BaseMenu baseMenu){
-        System.err.println("修改数据"+baseMenu.toString());
-        return true;
+    public ResponseResult deleteMenu(@RequestBody BaseMenu baseMenu){
+        System.err.println("删除的数据是"+baseMenu.toString());
+        boolean b =false;
+        b = iBaseMenuService.removeById(baseMenu.getId());
+        ResponseResult responseResult=new ResponseResult();
+        responseResult.setResult(b);
+        return responseResult;
     }
+//    @RequestMapping("deleteMenu")
+//    public boolean deleteMenu(@RequestBody BaseMenu baseMenu){
+//        System.err.println("删除数据"+baseMenu.toString());
+//        return true;
+//    }
+
 
     /**
       *@Author tongdaowei

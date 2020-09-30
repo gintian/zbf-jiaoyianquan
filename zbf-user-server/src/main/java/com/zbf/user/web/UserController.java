@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/auth")
 public class UserController {
-    private static final Pattern PATTERN_PHONE = Pattern.compile("^-?\\d+(\\.\\d+)?$");
-    private static final Pattern PATTERN_EMAIL = Pattern.compile("^\\w+@\\w+([-]\\w+)*(\\.\\w+)+$");
+//    private static final Pattern PATTERN_PHONE = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+//    private static final Pattern PATTERN_EMAIL = Pattern.compile("^\\w+@\\w+([-]\\w+)*(\\.\\w+)+$");
     @Autowired
     RedisTemplate<String,String> redisTemplate;
     @Autowired
@@ -210,16 +210,16 @@ public class UserController {
         FreemarkerUtils.getStaticHtml(RestController.class,"/template/","sendOK.html",stringObjectHashMap,response.getWriter());
     }
 
-    @RequestMapping("/register1")
-    public boolean register1(String password){
-        String yzm = redisTemplate.opsForValue().get("yzm");
-        System.err.println(yzm+"---------------------------------------------------------------");
-        if(password.equals(yzm)){
-            ResponseResult.getResponseResult().setCode(1006);
-            return true;
-        }
-        return false;
-    }
+//    @RequestMapping("/register1")
+//    public boolean register1(String password){
+//        String yzm = redisTemplate.opsForValue().get("yzm");
+//        System.err.println(yzm+"---------------------------------------------------------------");
+//        if(password.equals(yzm)){
+//            ResponseResult.getResponseResult().setCode(1006);
+//            return true;
+//        }
+//        return false;
+//    }
 
 //    @RequestMapping("/getyzm")
 //    public boolean getyzm(@RequestParam("tel") String tel) {

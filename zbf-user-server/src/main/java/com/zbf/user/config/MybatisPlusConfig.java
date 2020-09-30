@@ -57,14 +57,14 @@ public class MybatisPlusConfig {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/" +moduleName+"/src/main/java");
         //需要修改
-        gc.setAuthor("张经杰");
+        gc.setAuthor("tong");
         gc.setOpen(false);
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         //需要修改
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/0309db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
+        dsc.setUrl("jdbc:mysql://localhost:3306/shixun?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("root");

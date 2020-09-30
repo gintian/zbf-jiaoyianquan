@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tong.mapper.ZbfExportTaskHeaderMapper">
+    <select id="selectPageVos" resultType="com.tong.entity.ZbfExportTaskHeader">
+        select * from zbf_export_task_header
+
+        <where>
+           <if test="headerVo.taskName!=null and headerVo.taskName!=''">
+               and task_name like '%${headerVo.taskName}%'
+           </if>
+        </where>
+    </select>
+</mapper>

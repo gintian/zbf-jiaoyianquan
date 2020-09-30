@@ -13,8 +13,9 @@
         <module>zbf-auth-core</module>
         <module>zbf-user-server</module>
         <module>zbf-common</module>
-        <module>server-messgae</module>
         <module>zbf-sms</module>
+        <module>elastic-job</module>
+        <module>zbf-elastic-job</module>
     </modules>
 
     <properties>
